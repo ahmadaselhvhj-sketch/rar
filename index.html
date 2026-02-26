@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لعبة السلوتس</title>
+    <style>
+        body { font-family: 'Tahoma', sans-serif; background: #1a1a2e; color: #fff; text-align: center; }
+        .container { max-width: 600px; margin: auto; padding: 20px; }
+        .balance-box { background: #16213e; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
+        button { background: #0f3460; color: white; border: none; padding: 10px 20px; margin: 5px; border-radius: 5px; cursor: pointer; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .slots { display: flex; justify-content: center; gap: 10px; margin: 30px 0; }
+        .slot { width: 80px; height: 80px; background: #0f3460; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 40px; border: 2px solid #e94560; transition: all 0.2s; }
+        .spin-btn { background: #e94560; font-size: 20px; padding: 15px 40px; }
+        .message { margin-top: 20px; font-size: 18px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎰 لعبة السلوتس</h1>
+        <div id="login" style="display: none;">جاري تحميل البيانات...</div>
+        <div id="gameArea" style="display: none;">
+            <div class="balance-box">
+                <p>💰 الرصيد الأساسي: <span id="realBalance">0</span></p>
+                <p>🎁 رصيد البونص: <span id="bonusBalance">0</span></p>
+                <p>🆔 معرف المستخدم: <span id="userId"></span></p>
+            </div>
+            <div id="choiceSection">
+                <p>اختر رصيد اللعب:</p>
+                <button id="playReal" class="btn">لعب بالرصيد الأساسي</button>
+                <button id="playBonus" class="btn">لعب برصيد البونص</button>
+            </div>
+            <div id="gameSection" style="display: none;">
+                <div class="slots" id="slots">
+                    <div class="slot">🍒</div>
+                    <div class="slot">🍒</div>
+                    <div class="slot">🍒</div>
+                    <div class="slot">🍒</div>
+                    <div class="slot">🍒</div>
+                </div>
+                <button class="spin-btn" id="spinBtn">🔄 تدوير (1000)</button>
+                <div class="message" id="message"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // استخراج userid من الرابط
+        const urlParams = new URLSearchParams(window.location.search);
+        const userId = urlParams.get('userid');
+        if (!userId) {
+            document.body.innerHTML = '<h2>❌ خطأ: لم يتم العثور على معرف المستخدم</h2>';
+        } else {
+            document.getElementById('userId').innerText = userId;
+        }
+
+        // رابط Google Apps Script (استبدل بالرابط الخاص بك)
+        const appsScriptUrl = 'https://script.google.com/macros/s/AKfycbwU4ZYlIhpqlxHdOuC6IZKH5Tdyoz3ciM88fULuQCeZFn2fO28DCJ-VrSSb9g9ypUfV/exec';
+
+        let userData = null;
+        let currentPlayBalance = null; // 'real' or 'bonus'
+        let symbols = ['🍒', '🍋', '🍊', '🍇', '💎', '7️⃣', '⭐'];
+
+        // دالة لجلب بيانات المستخدم
+        async function loadUserData() {
+            try {
+                const response = await fetch(`${appsScriptUrl}?action=getUser&userId=${userId}`);
+                userData = await response.json();
+                if (userData.error) throw new Error(userData.error);
+                document.getElementById('realBalance').innerText = userData.balance;
+                document.getElementById('bonusBalance').innerText = userData.bonus_balance;
+                document.getElementById('login').style.display = 'none';
+                document.getElementById('gameArea').style.display = 'block';
+            } catch (e) {
+                document.getElementById('login').innerHTML = '❌ فشل تحميل البيانات: ' + e.message;
+            }
+        }
+
+        // اختيار نوع الرصيد
+        document.getElementById('playReal').addEventListener('click', () => {
+            if (userData.balance < 1000) {
+                alert('رصيدك الأساسي أقل من 1000');
+                return;
+            }
+            currentPlayBalance = 'real';
+            startGame();
+        });
+        document.getElementById('playBonus').addEventListener('click', () => {
+            if (userData.bonus_balance < 1000) {
+                alert('رصيد البونص أقل من 1000');
+                return;
+            }
+            currentPlayBalance = 'bonus';
+            startGame();
+        });
+
+        function startGame() {
+            document.getElementById('choiceSection').style.display = 'none';
+            document.getElementById('gameSection').style.display = 'block';
+        }
+
+        // دالة تدوير
+        document.getElementById('spinBtn').addEventListener('click', async () => {
+            const spinBtn = document.getElementById('spinBtn');
+            spinBtn.disabled = true;
+            spinBtn.innerText = 'جاري التدوير...';
+
+            try {
+                // الاتصال بالـ Google Apps Script لتنفيذ الدورة
+                const response = await fetch(appsScriptUrl, {
+                    method: 'POST',
+                    mode: 'no-cors', // أو استخدم CARS if needed
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({
+                        action: 'spin',
+                        userId: userId,
+                        playBalance: currentPlayBalance
+                    })
+                });
+                // بسبب no-cors لا يمكن قراءة الرد، لذا سنفترض نجاح مؤقت
+                // الحل الأفضل: استخدام JSONP أو تفعيل CORS في Apps Script
+                // سنقوم بمحاكاة استجابة (يجب تعديلها حسب الرد الفعلي)
+                
+                // محاكاة استجابة عشوائية (يتم استبدالها بالاستجابة الحقيقية)
+                const winAmount = Math.random() < 0.3 ? 2000 : 0; // وهمي
+                const spinResult = simulateSpin(winAmount);
+                
+                // تحديث واجهة السلوتس
+                const slotDivs = document.querySelectorAll('.slot');
+                for (let i = 0; i < slotDivs.length; i++) {
+                    slotDivs[i].innerText = spinResult.symbols[i];
+                }
+
+                if (winAmount > 0) {
+                    document.getElementById('message').innerHTML = `🎉 ربحت ${winAmount}!`;
+                } else {
+                    document.getElementById('message').innerHTML = '😞 لم تربح هذه المرة';
+                }
+
+                // تحديث الرصيد المعروض
+                if (currentPlayBalance === 'real') {
+                    userData.balance -= 1000;
+                    if (winAmount > 0) userData.balance += winAmount;
+                    document.getElementById('realBalance').innerText = userData.balance;
+                } else {
+                    userData.bonus_balance -= 1000;
+                    if (winAmount > 0) userData.bonus_balance += winAmount;
+                    document.getElementById('bonusBalance').innerText = userData.bonus_balance;
+                }
+
+            } catch (e) {
+                document.getElementById('message').innerHTML = '❌ خطأ في الاتصال بالسيرفر';
+            } finally {
+                spinBtn.disabled = false;
+                spinBtn.innerText = '🔄 تدوير (1000)';
+            }
+        });
+
+        // دالة مساعدة لمحاكاة الرموز بناءً على المكسب
+        function simulateSpin(winAmount) {
+            let symbolsResult = [];
+            if (winAmount === 2000) {
+                // 3 رموز متشابهة
+                let sym = symbols[Math.floor(Math.random() * symbols.length)];
+                for (let i = 0; i < 5; i++) {
+                    symbolsResult.push(i < 3 ? sym : symbols[Math.floor(Math.random() * symbols.length)]);
+                }
+            } else if (winAmount === 4000) {
+                let sym = symbols[Math.floor(Math.random() * symbols.length)];
+                for (let i = 0; i < 5; i++) {
+                    symbolsResult.push(i < 4 ? sym : symbols[Math.floor(Math.random() * symbols.length)]);
+                }
+            } else if (winAmount === 10000) {
+                let sym = symbols[Math.floor(Math.random() * symbols.length)];
+                for (let i = 0; i < 5; i++) symbolsResult.push(sym);
+            } else {
+                // لا ربح: رموز عشوائية مختلفة
+                for (let i = 0; i < 5; i++) {
+                    symbolsResult.push(symbols[Math.floor(Math.random() * symbols.length)]);
+                }
+            }
+            return { symbols: symbolsResult };
+        }
+
+        // تحميل البيانات عند بدء الصفحة
+        loadUserData();
+    </script>
+</body>
+</html>
