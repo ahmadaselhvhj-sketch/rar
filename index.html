@@ -3,312 +3,284 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎰 لعبة السلوتس - PIT</title>
+    <title>🎰 PIT SLOT</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, #1a0b2e, #2d1a44);
+            background: linear-gradient(145deg, #1a0b2e, #2d1a44);
             display: flex;
             justify-content: center;
             align-items: center;
+            color: white;
             padding: 10px;
         }
-        .container {
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(5px);
-            border-radius: 50px;
-            padding: 20px;
-            width: 100%;
-            max-width: 600px;
-            border: 2px solid gold;
-            box-shadow: 0 0 50px rgba(255,215,0,0.5);
-        }
-        .balance-box {
-            background: #4a1d6d;
-            color: white;
-            padding: 15px;
+        .game-container {
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(10px);
             border-radius: 40px;
-            text-align: center;
-            font-size: 1.4em;
-            margin-bottom: 20px;
-            border: 2px solid gold;
-            box-shadow: inset 0 0 15px gold;
+            padding: 25px 20px;
+            width: 100%;
+            max-width: 500px;
+            border: 2px solid #9b4dff;
+            box-shadow: 0 0 30px #9b4dff;
         }
-        .choice-box {
+        h1 { text-align: center; color: gold; margin-bottom: 20px; text-shadow: 0 0 15px gold; }
+        .balance-box {
+            background: #2c0b3a;
+            border: 2px solid gold;
+            border-radius: 50px;
+            padding: 15px;
+            margin: 15px 0;
             display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin: 20px 0;
+            justify-content: space-between;
+            font-weight: bold;
+            font-size: 1.1em;
+            gap: 10px;
             flex-wrap: wrap;
         }
+        .choice-buttons {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
         .choice-btn {
-            background: linear-gradient(135deg, #9b4dff, #6a1b9a);
-            border: none;
+            flex: 1;
+            background: linear-gradient(135deg, #4a1d6d, #2c0b3a);
+            border: 2px solid gold;
             color: white;
-            padding: 15px 25px;
-            border-radius: 60px;
-            font-size: 1.3em;
-            font-weight: bold;
+            padding: 12px;
+            border-radius: 50px;
+            font-size: 1.1em;
             cursor: pointer;
             transition: 0.3s;
-            border: 2px solid gold;
-            flex: 1 1 200px;
-            box-shadow: 0 0 20px rgba(155,77,255,0.5);
         }
-        .choice-btn:hover { transform: scale(1.05); box-shadow: 0 0 30px gold; }
-        .choice-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-        .slots-container {
+        .choice-btn.active {
+            background: gold;
+            color: #1a0b2e;
+            font-weight: bold;
+            box-shadow: 0 0 20px gold;
+        }
+        .slot-machine {
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             margin: 30px 0;
-            direction: ltr;
             flex-wrap: wrap;
         }
         .slot {
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             background: #2c0b3a;
             border: 3px solid gold;
             border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3em;
+            font-size: 40px;
+            font-weight: bold;
             color: gold;
-            text-shadow: 0 0 20px gold;
-            transition: 0.1s;
-            box-shadow: inset 0 0 15px rgba(255,215,0,0.3);
+            text-shadow: 0 0 15px gold;
+            box-shadow: 0 0 20px #9b4dff;
         }
         .spin-btn {
             background: linear-gradient(135deg, #9b4dff, #6a1b9a);
-            color: white;
             border: none;
-            padding: 18px;
-            border-radius: 60px;
-            font-size: 2em;
-            font-weight: bold;
-            width: 100%;
-            cursor: pointer;
-            border: 3px solid gold;
-            margin: 20px 0;
-            box-shadow: 0 0 30px gold;
-            transition: 0.3s;
-        }
-        .spin-btn:hover:not(:disabled) { transform: scale(1.02); box-shadow: 0 0 50px gold; }
-        .spin-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        .result-box {
-            text-align: center;
             color: white;
-            font-size: 1.8em;
-            padding: 15px;
-            background: rgba(0,0,0,0.8);
+            padding: 18px;
+            width: 80%;
+            margin: 15px auto;
             border-radius: 50px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
             border: 2px solid gold;
-            display: none;
+            box-shadow: 0 0 25px gold;
+            display: block;
+        }
+        .spin-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .result {
+            text-align: center;
             margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: gold;
+            min-height: 40px;
         }
         .hidden { display: none; }
-        .footer { display: none; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="balance-box" id="balanceDisplay">الرصيد: 0</div>
-        
-        <!-- اختيار نوع الرصيد (يظهر إذا كان هناك بونص) -->
-        <div id="choiceContainer" class="choice-box hidden">
-            <button class="choice-btn" id="playBonus">🎁 لعب بالبونص</button>
-            <button class="choice-btn" id="playMain">💰 لعب بالرصيد الأساسي</button>
+    <div class="game-container">
+        <h1>🎰 PIT SLOT</h1>
+        <div class="balance-box">
+            <span>💰 الأساسي: <span id="main-balance">0</span></span>
+            <span>🎁 البونص: <span id="bonus-balance">0</span></span>
         </div>
-
-        <!-- واجهة اللعبة (تظهر بعد الاختيار) -->
-        <div id="gameContainer" class="hidden">
-            <div class="slots-container" id="slots">
-                <div class="slot">🍒</div>
-                <div class="slot">🍒</div>
-                <div class="slot">🍒</div>
-                <div class="slot">🍒</div>
-                <div class="slot">🍒</div>
+        <div class="choice-buttons" id="choice-section">
+            <button class="choice-btn" id="play-main">💎 العب بالرصيد</button>
+            <button class="choice-btn" id="play-bonus">🎁 العب بالبونص</button>
+        </div>
+        <div id="game-section" class="hidden">
+            <div class="slot-machine" id="slot-machine">
+                <div class="slot" id="slot1">🍒</div>
+                <div class="slot" id="slot2">🍒</div>
+                <div class="slot" id="slot3">🍒</div>
+                <div class="slot" id="slot4">🍒</div>
+                <div class="slot" id="slot5">🍒</div>
             </div>
-            <button class="spin-btn" id="spinBtn">🎰 دَوِّر</button>
-            <div class="result-box" id="resultBox"></div>
+            <button class="spin-btn" id="spin-btn">🔃 دَوِّر</button>
+            <div class="result" id="result"></div>
         </div>
     </div>
 
     <script>
-        // استخراج معرف المستخدم من الرابط
+        // ============================================================
+        //  إعدادات ثابتة - غير الرابط إلى رابط Apps Script الخاص بك
+        // ============================================================
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby72GtRgLqQYWaE2f_Rra7cqZll5gIlWtxhUD14YTOrktRY05oizY58JCA4lN7QlEK98Q/exec';  // ضع رابط الويب آب
+
+        // استخراج user_id من الرابط
         const urlParams = new URLSearchParams(window.location.search);
-        const TELEGRAM_ID = urlParams.get('user');
-        if (!TELEGRAM_ID) {
-            alert('❌ لم يتم العثور على معرف المستخدم. الرجاء الدخول عبر البوت.');
+        const USER_ID = urlParams.get('user_id');
+        if (!USER_ID) {
+            alert('❌ لم يتم العثور على معرف المستخدم!');
             throw new Error('No user ID');
         }
 
-        // رابط Google Apps Script (استبدل YOUR_SCRIPT_ID)
-        const API_URL = 'https://script.google.com/macros/s/AKfycbxbw_ssvy3iwpLK-dmtRJAdKDUVsnxS4r3gfCFSxdzOff3sh5PartlWNbvJbKB1lpK-2w/exec';
-
-        let currentBalance = 0;      // الرصيد الأساسي
-        let currentBonus = 0;        // رصيد البونص
-        let selectedType = null;     // 'main' أو 'bonus'
+        let userData = null;           // سيحتوي على { balance, bonus_balance }
+        let selectedType = null;       // 'main' أو 'bonus'
         let spinning = false;
 
-        // عناصر DOM
-        const balanceDisplay = document.getElementById('balanceDisplay');
-        const choiceContainer = document.getElementById('choiceContainer');
-        const gameContainer = document.getElementById('gameContainer');
-        const playBonusBtn = document.getElementById('playBonus');
-        const playMainBtn = document.getElementById('playMain');
-        const spinBtn = document.getElementById('spinBtn');
-        const slots = document.querySelectorAll('.slot');
-        const resultBox = document.getElementById('resultBox');
+        // عناصر HTML
+        const mainBalanceSpan = document.getElementById('main-balance');
+        const bonusBalanceSpan = document.getElementById('bonus-balance');
+        const choiceSection = document.getElementById('choice-section');
+        const gameSection = document.getElementById('game-section');
+        const playMainBtn = document.getElementById('play-main');
+        const playBonusBtn = document.getElementById('play-bonus');
+        const spinBtn = document.getElementById('spin-btn');
+        const resultDiv = document.getElementById('result');
+        const slots = [
+            document.getElementById('slot1'),
+            document.getElementById('slot2'),
+            document.getElementById('slot3'),
+            document.getElementById('slot4'),
+            document.getElementById('slot5')
+        ];
 
-        // رموز محتملة للسلوتس
-        const symbols = ['🍒', '🍋', '🍊', '🍇', '💎', '7️⃣', '⭐', '🔔'];
-
-        // تحديث عرض الرصيد
-        function updateBalanceDisplay() {
-            if (selectedType === 'main') {
-                balanceDisplay.innerText = `💰 الرصيد الأساسي: ${currentBalance}`;
-            } else if (selectedType === 'bonus') {
-                balanceDisplay.innerText = `🎁 رصيد البونص: ${currentBonus}`;
-            } else {
-                balanceDisplay.innerText = `💰 الأساسي: ${currentBalance}  |  🎁 البونص: ${currentBonus}`;
+        // ============================================================
+        //  تحميل بيانات المستخدم من Apps Script
+        // ============================================================
+        async function loadUserData() {
+            try {
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'getUser', telegramId: USER_ID })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    userData = data.user;
+                    updateBalanceDisplay();
+                } else {
+                    alert('❌ فشل تحميل بيانات المستخدم: ' + data.error);
+                }
+            } catch (e) {
+                console.error(e);
+                alert('❌ خطأ في الاتصال بالسيرفر');
             }
         }
 
-        // تحميل بيانات المستخدم من السكربت
-        async function loadUserData() {
+        function updateBalanceDisplay() {
+            if (userData) {
+                mainBalanceSpan.innerText = userData.balance;
+                bonusBalanceSpan.innerText = userData.bonus_balance;
+            }
+        }
+
+        // ============================================================
+        //  اختيار نوع الرصيد
+        // ============================================================
+        playMainBtn.addEventListener('click', () => {
+            if (userData.balance < 1000) {
+                alert('⚠️ رصيدك الأساسي لا يكفي (يحتاج 1000)');
+                return;
+            }
+            selectedType = 'main';
+            choiceSection.classList.add('hidden');
+            gameSection.classList.remove('hidden');
+        });
+
+        playBonusBtn.addEventListener('click', () => {
+            if (userData.bonus_balance < 1000) {
+                alert('⚠️ رصيد البونص لا يكفي (يحتاج 1000)');
+                return;
+            }
+            selectedType = 'bonus';
+            choiceSection.classList.add('hidden');
+            gameSection.classList.remove('hidden');
+        });
+
+        // ============================================================
+        //  دورة اللعب
+        // ============================================================
+        spinBtn.addEventListener('click', async () => {
+            if (spinning) return;
+            spinning = true;
+            spinBtn.disabled = true;
+            resultDiv.innerText = '⏳ جاري التدوير...';
+
             try {
-                const response = await fetch(API_URL, {
+                const response = await fetch(APPS_SCRIPT_URL, {
                     method: 'POST',
                     body: JSON.stringify({
-                        action: 'getUserData',
-                        telegramId: TELEGRAM_ID
+                        action: 'spin',
+                        telegramId: USER_ID,
+                        balanceType: selectedType   // 'main' أو 'bonus'
                     })
                 });
                 const data = await response.json();
                 if (data.success) {
-                    currentBalance = data.balance || 0;
-                    currentBonus = data.bonus_balance || 0;
+                    // تحديث الرموز
+                    for (let i = 0; i < 5; i++) {
+                        slots[i].innerText = data.symbols[i];
+                    }
+                    // تحديث الرصيد
+                    userData = data.updatedUser;
                     updateBalanceDisplay();
-                    if (currentBonus > 0) {
-                        choiceContainer.classList.remove('hidden');
+                    // عرض رسالة الفوز
+                    if (data.winAmount > 0) {
+                        resultDiv.innerText = `🎉 فزت ب ${data.winAmount} !`;
                     } else {
-                        // لا يوجد بونص، ابدأ مباشرة بالرصيد الأساسي
-                        startGameWithType('main');
+                        resultDiv.innerText = '😢 لا فوز هذه المرة';
                     }
                 } else {
-                    alert('❌ فشل تحميل البيانات: ' + (data.error || 'خطأ غير معروف'));
+                    alert('❌ خطأ: ' + data.error);
+                    resultDiv.innerText = '';
                 }
-            } catch (err) {
-                alert('❌ خطأ في الاتصال بالخادم');
-                console.error(err);
-            }
-        }
-
-        // بدء اللعب بنوع معين
-        function startGameWithType(type) {
-            selectedType = type;
-            choiceContainer.classList.add('hidden');
-            gameContainer.classList.remove('hidden');
-            updateBalanceDisplay();
-        }
-
-        playBonusBtn.addEventListener('click', () => startGameWithType('bonus'));
-        playMainBtn.addEventListener('click', () => startGameWithType('main'));
-
-        // دورة عشوائية للمؤثر البصري
-        function animateSlots(callback) {
-            let spins = 10;
-            let interval = setInterval(() => {
-                slots.forEach(slot => {
-                    slot.innerText = symbols[Math.floor(Math.random() * symbols.length)];
-                });
-                spins--;
-                if (spins === 0) {
-                    clearInterval(interval);
-                    callback();
-                }
-            }, 100);
-        }
-
-        // تدوير
-        spinBtn.addEventListener('click', async () => {
-            if (spinning) return;
-
-            const balanceToUse = selectedType === 'main' ? currentBalance : currentBonus;
-            if (balanceToUse < 1000) {
-                alert('❌ رصيد غير كافٍ، تحتاج إلى 1000 على الأقل.');
-                return;
-            }
-
-            spinning = true;
-            spinBtn.disabled = true;
-            resultBox.style.display = 'none';
-
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        action: 'spin',
-                        telegramId: TELEGRAM_ID,
-                        type: selectedType
-                    })
-                });
-                const data = await response.json();
-
-                if (!data.success) {
-                    alert('❌ خطأ: ' + (data.error || 'غير معروف'));
-                    spinning = false;
-                    spinBtn.disabled = false;
-                    return;
-                }
-
-                // تحديث الرصيد من الخادم
-                if (selectedType === 'main') {
-                    currentBalance = data.new_balance;
-                } else {
-                    currentBonus = data.new_bonus;
-                }
-                updateBalanceDisplay();
-
-                const winAmount = data.win || 0;
-
-                animateSlots(() => {
-                    // عرض النتيجة حسب المكسب
-                    if (winAmount >= 10000) {
-                        // 5 رموز متطابقة
-                        const sym = symbols[Math.floor(Math.random() * symbols.length)];
-                        slots.forEach(slot => slot.innerText = sym);
-                        resultBox.innerHTML = `🎉🎉 مبروك! ربحت 10000! 🎉🎉`;
-                    } else if (winAmount >= 4000) {
-                        // 4 رموز متطابقة
-                        const sym = symbols[Math.floor(Math.random() * symbols.length)];
-                        for (let i = 0; i < 4; i++) slots[i].innerText = sym;
-                        slots[4].innerText = symbols[Math.floor(Math.random() * symbols.length)];
-                        resultBox.innerHTML = `🎉 مبروك! ربحت 4000! 🎉`;
-                    } else if (winAmount >= 2000) {
-                        // 3 رموز متطابقة
-                        const sym = symbols[Math.floor(Math.random() * symbols.length)];
-                        for (let i = 0; i < 3; i++) slots[i].innerText = sym;
-                        for (let i = 3; i < 5; i++) slots[i].innerText = symbols[Math.floor(Math.random() * symbols.length)];
-                        resultBox.innerHTML = `🎉 مبروك! ربحت 2000! 🎉`;
-                    } else {
-                        // لا فوز: رموز عشوائية
-                        slots.forEach(slot => slot.innerText = symbols[Math.floor(Math.random() * symbols.length)]);
-                        resultBox.innerHTML = `😢 للأسف لم تربح هذه المرة`;
-                    }
-                    resultBox.style.display = 'block';
-                    spinning = false;
-                    spinBtn.disabled = false;
-                });
-            } catch (err) {
-                alert('❌ خطأ في الاتصال بالخادم');
-                console.error(err);
+            } catch (e) {
+                console.error(e);
+                alert('❌ حدث خطأ في الاتصال');
+                resultDiv.innerText = '';
+            } finally {
                 spinning = false;
                 spinBtn.disabled = false;
+                // إذا أصبح الرصيد أقل من 1000، نعيد اختيار الرصيد
+                if (selectedType === 'main' && userData.balance < 1000) {
+                    alert('⚠️ رصيدك الأساسي نفد، اختر نوعاً آخر');
+                    choiceSection.classList.remove('hidden');
+                    gameSection.classList.add('hidden');
+                    selectedType = null;
+                } else if (selectedType === 'bonus' && userData.bonus_balance < 1000) {
+                    alert('⚠️ رصيد البونص نفد، اختر نوعاً آخر');
+                    choiceSection.classList.remove('hidden');
+                    gameSection.classList.add('hidden');
+                    selectedType = null;
+                }
             }
         });
 
