@@ -142,7 +142,7 @@
         // ============================================================
         //  إعدادات ثابتة - غير الرابط إلى رابط Apps Script الخاص بك
         // ============================================================
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby72GtRgLqQYWaE2f_Rra7cqZll5gIlWtxhUD14YTOrktRY05oizY58JCA4lN7QlEK98Q/exec';  // ضع رابط الويب آب
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzU5mn0cRlvHvw5DNNGz0Gh9e8CGq_jGMpnNFyJdvdjQkbhScBrziH6-FCGov3bsVcTgA/exec';  // ضع رابط الويب آب
 
         // استخراج user_id من الرابط
         const urlParams = new URLSearchParams(window.location.search);
@@ -174,7 +174,7 @@
         ];
 
         // ============================================================
-        //  تحميل بيانات المستخدم من Apps Script
+        //  تحميل بيانات المستخدم من Apps Script (مع إنشائه إن لم يوجد)
         // ============================================================
         async function loadUserData() {
             try {
