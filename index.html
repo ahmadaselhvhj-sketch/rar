@@ -3,122 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎡 PIT Wheel</title>
+    <title>عجلة الحظ - Ichancy</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: url('https://i.postimg.cc/wB7MWQsq/IMG-20260129-003341-890.jpg') no-repeat center center fixed;
-            background-size: cover;
-            position: relative;
-        }
-
-        /* طبقة شفافة خفيفة جداً */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.2); /* شفافية 20% فقط */
-            z-index: 0;
-        }
-
-        .container {
-            background: rgba(0, 0, 0, 0.3); /* شفافية 30% */
-            backdrop-filter: blur(3px);
-            border-radius: 50px;
-            padding: 20px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            max-width: 500px;
-            width: 90%;
-            border: 2px solid #9b4dff;
-            position: relative;
-            z-index: 1;
-        }
-
-        .timer-box {
-            background: linear-gradient(135deg, #4a1d6d, #2c0b3a);
             color: white;
-            text-align: center;
-            padding: 15px;
-            border-radius: 50px;
-            margin-bottom: 20px;
-            font-weight: bold;
-            border: 2px solid gold;
-            font-size: 1.2em;
-            box-shadow: 0 0 20px gold;
-            display: none;
         }
-
+        .container {
+            text-align: center;
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            max-width: 600px;
+            width: 90%;
+        }
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
         .wheel-container {
             position: relative;
-            width: 280px;
-            height: 280px;
+            width: 300px;
+            height: 300px;
             margin: 20px auto;
         }
-
-        .wheel {
+        canvas {
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 30px #9b4dff;
-            transition: transform 4s cubic-bezier(0.25, 0.1, 0.15, 1);
-            border: 5px solid #9b4dff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
         }
-
-        .segment {
-            position: absolute;
-            width: 50%;
-            height: 50%;
-            transform-origin: 100% 100%;
-            left: 0;
-            top: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
-            color: white;
-            text-shadow: 0 0 10px gold, 0 0 20px gold;
-            font-size: 18px;
-            border: 1px solid rgba(255,215,0,0.3);
-            box-shadow: inset 0 0 15px rgba(255,215,0,0.3);
-        }
-
-        /* 8 أجزاء متساوية تماماً - 45 درجة لكل جزء */
-        .segment:nth-child(1) { transform: rotate(0deg) skewY(45deg); background: #4a1d6d; }
-        .segment:nth-child(2) { transform: rotate(45deg) skewY(45deg); background: #2c0b3a; }
-        .segment:nth-child(3) { transform: rotate(90deg) skewY(45deg); background: #4a1d6d; }
-        .segment:nth-child(4) { transform: rotate(135deg) skewY(45deg); background: #2c0b3a; }
-        .segment:nth-child(5) { transform: rotate(180deg) skewY(45deg); background: #4a1d6d; }
-        .segment:nth-child(6) { transform: rotate(225deg) skewY(45deg); background: #2c0b3a; }
-        .segment:nth-child(7) { transform: rotate(270deg) skewY(45deg); background: #4a1d6d; }
-        .segment:nth-child(8) { transform: rotate(315deg) skewY(45deg); background: #2c0b3a; }
-
-        .segment span {
-            transform: rotate(45deg) translate(45px, 0); /* غير 33.75 إلى 45 */
-            font-size: 20px;
-            font-weight: bold;
-            color: white;
-            text-shadow: 0 0 15px gold, 0 0 30px gold;
-            letter-spacing: 2px;
-}
-
         .pointer {
             position: absolute;
-            top: -15px;
+            top: -20px;
             left: 50%;
             transform: translateX(-50%);
             width: 0;
@@ -126,324 +52,204 @@
             border-left: 20px solid transparent;
             border-right: 20px solid transparent;
             border-top: 40px solid gold;
-            filter: drop-shadow(0 0 10px gold);
+            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.3));
             z-index: 10;
         }
-
-        .center-dot {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, gold, #ffa500);
-            border-radius: 50%;
-            z-index: 20;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #4a1d6d;
-            font-size: 28px;
-            font-weight: bold;
-            border: 3px solid white;
-            box-shadow: 0 0 30px gold, 0 0 60px gold;
-        }
-
         .spin-btn {
-            background: linear-gradient(135deg, #9b4dff, #6a1b9a);
-            color: white;
+            background: gold;
+            color: #333;
             border: none;
             padding: 15px 40px;
+            font-size: 1.2em;
             border-radius: 50px;
-            font-size: 24px;
-            font-weight: bold;
             cursor: pointer;
-            transition: 0.3s;
-            margin: 20px auto;
-            display: block;
-            width: 80%;
-            box-shadow: 0 5px 15px rgba(155, 77, 255, 0.6), 0 0 20px gold;
-            border: 2px solid gold;
+            font-weight: bold;
+            margin: 20px 0;
+            transition: transform 0.2s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
-
-        .spin-btn:hover:not(:disabled) {
+        .spin-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 10px 25px rgba(155, 77, 255, 0.8), 0 0 30px gold;
         }
-
         .spin-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
-            box-shadow: none;
         }
-
-        .result-box {
-            text-align: center;
-            padding: 15px;
-            background: rgba(0,0,0,0.8);
-            border-radius: 50px;
+        .message {
+            font-size: 1.1em;
             margin-top: 20px;
-            border: 2px solid gold;
-            display: none;
-            color: white;
-            box-shadow: 0 0 30px gold;
+            padding: 10px;
+            border-radius: 10px;
+            background: rgba(0,0,0,0.3);
         }
-
-        .prize-value {
-            font-size: 32px;
+        .prize-info {
+            font-size: 1.3em;
             font-weight: bold;
             color: gold;
-            margin-top: 5px;
-            text-shadow: 0 0 15px gold;
-        }
-
-        /* إخفاء النص السفلي */
-        .footer {
-            display: none;
-        }
-
-        .glow-effect {
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            right: -10px;
-            bottom: -10px;
-            border-radius: 50%;
-            background: radial-gradient(circle at 50% 50%, rgba(255,215,0,0.2), transparent 70%);
-            pointer-events: none;
-            z-index: 5;
-        }
-
-        /* لوحة الاختبار - مخفية للمستخدم */
-        .test-panel {
-            display: none;
+            text-shadow: 1px 1px 2px black;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div id="timerBox" class="timer-box"></div>
-
+        <h1>🎡 عجلة الحظ</h1>
         <div class="wheel-container">
-            <div class="glow-effect"></div>
             <div class="pointer"></div>
-            <div class="wheel" id="wheel">
-                <div class="segment"><span>PIT</span></div>
-                <div class="segment"><span>PIT</span></div>
-                <div class="segment"><span>PIT</span></div>
-                <div class="segment"><span>PIT</span></div>
-                <div class="segment"><span>PIT</span></div>
-                <div class="segment"><span>PIT</span></div>
-                <div class="segment"><span>PIT</span></div>
-                <div class="segment"><span>PIT</span></div>
-            </div>
-            <div class="center-dot" id="centerDot">🎡</div>
+            <canvas id="wheelCanvas" width="300" height="300"></canvas>
         </div>
-
-        <button class="spin-btn" id="spinBtn" onclick="startSpin()" disabled>🎲 PIT</button>
-
-        <div id="resultBox" class="result-box">
-            <div id="resultText"></div>
-            <div class="prize-value" id="prizeValue"></div>
-        </div>
+        <button class="spin-btn" id="spinButton" disabled>⏳ جاري التحميل...</button>
+        <div class="message" id="message"></div>
     </div>
 
     <script>
-        // ========== الإعدادات ==========
-        const API_URL = 'https://script.google.com/macros/s/AKfycbypmTSvZKAEiwxPUD9W-ZdPtKD5JOhuRU_Flsul7JCmi0Tv8ln0S8LanMZ66NsyK4_U/exec';
-        const TELEGRAM_ID = new URLSearchParams(window.location.search).get('user');
-
-        // ========== الجوائز (مخفية تماماً عن المستخدم) ==========
-        const prizes = [
-            { text: '5000', value: 5000, type: 'points', probability: 1 },
-            { text: 'حظ اوفر', value: 0, type: 'lose', probability: 16 },
-            { text: '5%', value: 5, type: 'bonus', probability: 2 },
-            { text: 'حظ اوفر', value: 0, type: 'lose', probability: 50 },
-            { text: '10%', value: 10, type: 'bonus', probability: 1 },
-            { text: 'حظ اوفر', value: 0, type: 'lose', probability: 10 },
-            { text: 'حظ اوفر', value: 0, type: 'lose', probability: 10 },
-            { text: 'حظ اوفر', value: 0, type: 'lose', probability: 10 }
+        // إعدادات العجلة
+        const segments = [
+            { label: '50', value: 50, color: '#FF6B6B' },
+            { label: '100', value: 100, color: '#4ECDC4' },
+            { label: '500', value: 500, color: '#45B7D1' },
+            { label: '1000', value: 1000, color: '#96CEB4' },
+            { label: '5%', value: 5, color: '#FFEEAD' },
+            { label: '25%', value: 25, color: '#D4A5A5' }
         ];
+        const segmentAngle = 360 / segments.length;
 
-        let isSpinning = false;
-        let countdownInterval = null;
+        // استخراج البيانات من الرابط
+        const urlParams = new URLSearchParams(window.location.search);
+        const userId = urlParams.get('user');
+        const prize = parseInt(urlParams.get('prize'));  // الجائزة التي حددها البوت
 
-        // ========== عند تحميل الصفحة ==========
-        window.onload = async function() {
-            if (!TELEGRAM_ID) {
-                alert('❌ خطأ: لا يوجد معرف مستخدم');
-                return;
-            }
-            
-            // التحقق من الوقت قبل تمكين الزر
-            await checkCanSpin();
-        };
+        let canSpin = false;
+        let spinInProgress = false;
 
-        // ========== التحقق من وقت آخر تدوير ==========
-        async function checkCanSpin() {
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        action: 'canSpin',
-                        telegramId: TELEGRAM_ID
-                    })
-                });
+        // عنوان Google Apps Script
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxcQVjYwUOBAUyV4qjmrxE4gR8CNq2nfPSHulDr2XDLpgVW9YtR53lGXE5SaykijRbw/exec';  // ضع رابط التطبيق الخاص بك
+
+        // رسم العجلة
+        const canvas = document.getElementById('wheelCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function drawWheel(rotateAngle = 0) {
+            ctx.clearRect(0, 0, 300, 300);
+            for (let i = 0; i < segments.length; i++) {
+                const startAngle = (i * segmentAngle + rotateAngle) * Math.PI / 180;
+                const endAngle = ((i + 1) * segmentAngle + rotateAngle) * Math.PI / 180;
                 
+                ctx.beginPath();
+                ctx.moveTo(150, 150);
+                ctx.arc(150, 150, 150, startAngle, endAngle);
+                ctx.closePath();
+                ctx.fillStyle = segments[i].color;
+                ctx.fill();
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // إضافة النص
+                ctx.save();
+                ctx.translate(150, 150);
+                ctx.rotate(startAngle + (segmentAngle / 2) * Math.PI / 180);
+                ctx.textAlign = 'center';
+                ctx.fillStyle = '#000';
+                ctx.font = 'bold 16px Arial';
+                ctx.fillText(segments[i].label, 80, 10);
+                ctx.restore();
+            }
+        }
+
+        drawWheel();
+
+        // التحقق من إمكانية الدوران عبر Apps Script
+        async function checkSpinEligibility() {
+            try {
+                const response = await fetch(`${APPS_SCRIPT_URL}?action=check&user=${userId}`);
                 const data = await response.json();
-                
-                if (data.success) {
-                    if (data.canSpin) {
-                        enableSpin();
-                    } else {
-                        startCountdown(data.remainingTime);
-                    }
+                if (data.canSpin) {
+                    canSpin = true;
+                    document.getElementById('spinButton').disabled = false;
+                    document.getElementById('spinButton').textContent = '🎲 ابدأ الدوران';
                 } else {
-                    // في حالة خطأ، نعطل الزر
-                    document.getElementById('spinBtn').disabled = true;
+                    canSpin = false;
+                    document.getElementById('spinButton').disabled = true;
+                    document.getElementById('spinButton').textContent = '⏳ انتظر 48 ساعة';
+                    document.getElementById('message').innerHTML = `⏰ آخر دورة كانت في ${data.lastSpinDate}. يمكنك الدوران مرة أخرى بعد ${data.remainingHours} ساعة.`;
                 }
             } catch (error) {
-                console.error('خطأ في التحقق:', error);
-                document.getElementById('spinBtn').disabled = true;
+                console.error('خطأ في الاتصال:', error);
+                document.getElementById('message').innerHTML = '⚠️ حدث خطأ في الاتصال، حاول مرة أخرى لاحقاً.';
             }
         }
 
-        // ========== تفعيل الزر - فقط هنا يمكن الضغط ==========
-        function enableSpin() {
-            document.getElementById('spinBtn').disabled = false;
-            document.getElementById('timerBox').style.display = 'none';
-            if (countdownInterval) clearInterval(countdownInterval);
+        // دالة لجعل العجلة تستقر على الجائزة المحددة (prize)
+        function getTargetAngle(prizeValue) {
+            // البحث عن مؤشر القطعة المطابقة للجائزة
+            const index = segments.findIndex(s => s.value === prizeValue);
+            if (index === -1) return 0;
+            // نحتاج لتدوير العجلة بحيث تشير العلامة (السهم) إلى منتصف القطعة المطلوبة
+            // السهم يشير إلى الزاوية 90 درجة (نحو الأعلى). نريد أن يكون منتصف القطعة عند 90 درجة.
+            // زاوية منتصف القطعة i = (i * 60 + 30) درجة. نريد أن تساوي 90 بعد الدوران.
+            // الدوران = 90 - (i*60 + 30) = 60 - i*60
+            const targetRotation = 60 - index * 60;  // بالدرجات
+            // نضيف دورات كاملة (720 درجة) لجعل الدوران أسرع
+            return targetRotation + 720;
         }
 
-        // ========== بدء العد التنازلي ==========
-        function startCountdown(remainingTime) {
-            const spinBtn = document.getElementById('spinBtn');
-            const timerBox = document.getElementById('timerBox');
-            
-            spinBtn.disabled = true;
-            timerBox.style.display = 'block';
-
-            if (countdownInterval) clearInterval(countdownInterval);
-
-            countdownInterval = setInterval(() => {
-                if (remainingTime <= 0) {
-                    clearInterval(countdownInterval);
-                    enableSpin();
-                    return;
-                }
-
-                const hours = Math.floor(remainingTime / (60 * 60 * 1000));
-                const minutes = Math.floor((remainingTime % (60 * 60 * 1000)) / (60 * 1000));
-                const seconds = Math.floor((remainingTime % (60 * 1000)) / 1000);
-
-                timerBox.innerHTML = `⏳ الوقت المتبقي: ${hours}h ${minutes}m ${seconds}s`;
-                remainingTime -= 1000;
-            }, 1000);
-        }
-
-        // ========== اختيار جائزة حسب النسبة ==========
-        function selectPrizeByProbability() {
-            const random = Math.random() * 100;
-            let cumulative = 0;
-            
-            for (const prize of prizes) {
-                cumulative += prize.probability;
-                if (random < cumulative) {
-                    return prize;
-                }
-            }
-            return prizes[0];
-        }
-
-        // ========== حساب زاوية التوقف بدقة ==========
-        function calculateStopAngle(prizeIndex) {
-            const segmentAngle = 45; // 360/8 = 45 درجة لكل جزء
-            const pointerAngle = -90; // السهم للأعلى
-            
-            // زاوية منتصف الجزء المطلوب
-            const targetSegmentMidAngle = prizeIndex * segmentAngle + segmentAngle/2;
-            
-            // المسافة التي يجب أن تدورها العجلة
-            let spinAngle = targetSegmentMidAngle - pointerAngle;
-            
-            // إضافة 5 لفات لجعل الدوران جميلاً
-            spinAngle += 1800; // 5 لفات * 360
-            
-            return spinAngle;
-        }
-
-        // ========== بدء الدوران ==========
-        async function startSpin() {
-            if (isSpinning) return;
-
-            // تعطيل الزر فور الضغط
-            document.getElementById('spinBtn').disabled = true;
-
-            // تسجيل وقت التدوير في Drive
+        // تسجيل الدورة بعد الانتهاء
+        async function recordSpin(prizeValue) {
             try {
-                await fetch(API_URL, {
+                const payload = {
+                    action: 'record',
+                    user: userId,
+                    prize: prizeValue,
+                    timestamp: Date.now() / 1000
+                };
+                const response = await fetch(APPS_SCRIPT_URL, {
                     method: 'POST',
-                    body: JSON.stringify({
-                        action: 'saveSpin',
-                        telegramId: TELEGRAM_ID
-                    })
+                    mode: 'no-cors',  // مهم لتجنب CORS
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
                 });
+                // مع no-cors لا يمكن قراءة الرد، نفترض النجاح
+                console.log('تم إرسال التسجيل');
             } catch (error) {
-                console.error('خطأ في تسجيل الوقت:', error);
+                console.error('فشل تسجيل الدورة:', error);
             }
-
-            spinWheel();
         }
 
-        // ========== تدوير العجلة ==========
-        function spinWheel() {
-            isSpinning = true;
-            document.getElementById('resultBox').style.display = 'none';
+        // معالج زر الدوران
+        document.getElementById('spinButton').addEventListener('click', async function() {
+            if (!canSpin || spinInProgress) return;
 
-            const selectedPrize = selectPrizeByProbability();
-            const prizeIndex = prizes.findIndex(p => p.text === selectedPrize.text);
-            const spinDegrees = calculateStopAngle(prizeIndex);
+            spinInProgress = true;
+            const btn = this;
+            btn.disabled = true;
+            btn.textContent = '🌀 جاري الدوران...';
 
-            const wheel = document.getElementById('wheel');
-            wheel.style.transform = `rotate(${spinDegrees}deg)`;
+            // تحديد زاوية الهدف (بناءً على الجائزة القادمة من البوت)
+            const targetAngle = getTargetAngle(prize);
 
+            // تطبيق الدوران
+            canvas.style.transform = `rotate(${targetAngle}deg)`;
+
+            // بعد انتهاء مدة الدوران (4 ثوان)
             setTimeout(async () => {
-                document.getElementById('resultText').innerHTML = 
-                    selectedPrize.type === 'lose' ? '😢 <b>للأسف...</b>' : '🎉 <b>مبروك! ربحت:</b>';
-                document.getElementById('prizeValue').innerHTML = selectedPrize.text;
-                document.getElementById('resultBox').style.display = 'block';
+                // إعادة تعيين التحويل لإزالة التدوير (لأن canvas سيظل مدوراً)
+                canvas.style.transform = 'rotate(0deg)';
+                // إعادة رسم العجلة في الوضع الطبيعي ولكن مع إظهار الجائزة (نعرف أن السهم يشير للقطعة الصحيحة)
+                // نعرض رسالة الجائزة
+                const segment = segments.find(s => s.value === prize);
+                document.getElementById('message').innerHTML = `🎉 تهانينا! لقد ربحت <span class="prize-info">${segment.label}</span>`;
 
-                // حفظ الجائزة في Drive
-                await savePrizeToDrive(selectedPrize);
-                
-                isSpinning = false;
+                // تسجيل الدورة
+                await recordSpin(prize);
 
-                // التحقق من الوقت مرة أخرى
-                await checkCanSpin();
+                btn.textContent = '✅ تم الدوران';
+                spinInProgress = false;
+                canSpin = false;  // نمنع الدوران مرة أخرى
+            }, 4000);  // نفس مدة transition
+        });
 
-                setTimeout(() => {
-                    wheel.style.transform = 'rotate(0deg)';
-                }, 3000);
-
-            }, 4000);
-        }
-
-        // ========== حفظ الجائزة في Drive ==========
-        async function savePrizeToDrive(prize) {
-            try {
-                await fetch(API_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        action: 'savePrize',
-                        telegramId: TELEGRAM_ID,
-                        prize: prize
-                    })
-                });
-            } catch (error) {
-                console.error('خطأ في حفظ الجائزة:', error);
-            }
-        }
+        // بدء التحقق عند تحميل الصفحة
+        checkSpinEligibility();
     </script>
 </body>
 </html>
